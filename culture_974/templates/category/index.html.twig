@@ -17,7 +17,8 @@
         {% for category in categories %}
             <div class="col-md-3 mb-4">
                 {# Lien vers le filtrage US2.3 : /events?category={id} #}
-                <a href="/events?category={{ category.id }}" class="text-decoration-none">
+                {# Remplace href="/events?category={{ category.id }}" par : #}
+                <a href="{{ path('app_category_events', {'id': category.id}) }}" class="text-decoration-none">
                     <div class="card h-100 shadow-sm border-0 hover-effect">
                         <div class="card-body text-center">
                             {# Affichage Icône + Nom  #}

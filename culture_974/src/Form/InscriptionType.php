@@ -18,13 +18,13 @@ class InscriptionType extends AbstractType
             ->add('email')
             ->add('telephone')
             ->add('nombrePlaces')
-            ->add('createdAt', null, [
-                'widget' => 'single_text',
-            ])
-            ->add('event', EntityType::class, [
-                'class' => Event::class,
-                'choice_label' => 'id',
-            ])
+            // ->add('createdAt', null, [
+            //     'widget' => 'single_text',
+            // ])
+            // ->add('event', EntityType::class, [
+            //     'class' => Event::class,
+            //     'choice_label' => 'nom',
+            // ])
         ;
     }
 

@@ -5,6 +5,11 @@
 {% block body %}
     <h1 class="mb-4">Explorer par catégorie</h1>
 
+    {# Lien Admin ajouté discrètement pour garder la fonctionnalité du Main #}
+    <div class="mb-3 text-end">
+        <a href="{{ path('app_category_new') }}" class="btn btn-sm btn-outline-secondary">Ajouter une catégorie (Admin)</a>
+    </div>
+
     <div class="row">
         {% for category in categories %}
             <div class="col-md-3 mb-4">
@@ -27,6 +32,10 @@
                         <div class="card-footer" style="background-color: {{ category.couleur }}; height: 5px; padding: 0;"></div>
                     </div>
                 </a>
+                {# Petits liens d'édition admin (Optionnel, fusionné du main) #}
+                <div class="text-center mt-1">
+                    <a href="{{ path('app_category_edit', {'id': category.id}) }}" class="text-muted small" style="font-size: 0.7rem;">Modifier</a>
+                </div>
             </div>
         {% else %}
             <div class="col-12">

@@ -1,11 +1,27 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Inscription{% endblock %}
+{% block title %}Inscription - {{ event.titre }}{% endblock %}
 
 {% block body %}
-    <h1>Create new Inscription</h1>
+<h1>S'inscrire à l'événement</h1>
 
-    {{ include('inscription/_form.html.twig') }}
+<div>
+    <h2>{{ event.titre }}</h2>
+    <p><strong>Date :</strong> {{ event.date|date('d/m/Y à H:i') }}</p>
+    <p><strong>Lieu :</strong> {{ event.lieu }}</p>
+    <p>{{ event.description }}</p>
+</div>
 
-    <a href="{{ path('app_inscription_index') }}">back to list</a>
+{% for message in app.flashes('success') %}
+    <p>{{ message }}</p>
+{% endfor %}
+
+<h3>Vos informations</h3>
+
+{{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button type="submit">Confirmer mon inscription</button>
+{{ form_end(form) }}
+
+<p><a href="{{ path('app_event_show', {'id': event.id}) }}">Retour à l'événement</a></p>
 {% endblock %}

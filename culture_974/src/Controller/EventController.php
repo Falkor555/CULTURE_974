@@ -3,8 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Event;
-
+use App\Entity\Inscription;
 use App\Form\EventType;
+use App\Form\InscriptionType;
 use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,7 +24,35 @@ final class EventController extends AbstractController
             'events' => $eventRepository->findAll(),
         ]);
     }
-    #[IsGranted('ROLE_ADMIN')]
+
+
+    #[Route('/{id}/sinscrire', name: 'app_event_inscription', methods: ['GET', 'POST'])]
+public function register(Event $event, Request $request, EntityManagerInterface $entityManager): Response
+{
+    $inscription = new Inscription();
+
+    $inscription->setEvent($event);
+
+    $form = $this->createForm(InscriptionType::class, $inscription);
+    $form->handleRequest($request);
+
+    if ($form->isSubmitted() && $form->isValid()) {
+
+        $entityManager->persist($inscription);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Votre inscription à "' . $event->getTitre() . '" a été enregistrée !');
+
+        return $this->redirectToRoute('app_event_index');
+    }
+
+    return $this->render('event/inscription.html.twig', [
+        'event' => $event,
+        'form' => $form->createView(),
+    ]);
+}
+
+    #[IsGranted('ROLE_USER')]
     #[Route('/new', name: 'app_event_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -52,7 +81,7 @@ final class EventController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_USER')]
     #[Route('/{id}/edit', name: 'app_event_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Event $event, EntityManagerInterface $entityManager): Response
     {
@@ -71,7 +100,7 @@ final class EventController extends AbstractController
         ]);
     }
 
-    #[IsGranted('ROLE_ADMIN')]
+    #[IsGranted('ROLE_USER')]
     #[Route('/{id}', name: 'app_event_delete', methods: ['POST'])]
     public function delete(Request $request, Event $event, EntityManagerInterface $entityManager): Response
     {

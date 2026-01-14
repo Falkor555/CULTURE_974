@@ -41,6 +41,10 @@
                         </p>
                     </div>
 
+<a href="{{ path('app_event_inscription', {'id': event.id}) }}" class="btn btn-primary w-100 rounded-pill">
+    <i class="fas fa-ticket-alt me-2"></i>S'inscrire
+</a>
+
                     <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between">
                         <a href="{{ path('app_event_show', {'id': event.id}) }}" class="btn btn-outline-info btn-sm">Détails</a>
                         <a href="{{ path('app_event_edit', {'id': event.id}) }}" class="btn btn-outline-warning btn-sm">Modifier</a>

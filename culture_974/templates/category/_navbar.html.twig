@@ -1,0 +1,27 @@
+{# templates/category/_navbar.html.twig #}
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Catégories
+    </a>
+    <ul class="dropdown-menu">
+        <li>
+            <a class="dropdown-item" href="{{ path('app_categories') }}">Toutes les catégories</a>
+        </li>
+        <li><hr class="dropdown-divider"></li>
+
+        {% for category in categories %}
+            {# Vérification pour US2.3 : Indication visuelle active #}
+            {% set isActive = app.request.query.get('category') == category.id %}
+            
+            <li>
+                {# Lien de filtrage US2.3 : /events?category={id} #}
+                <a class="dropdown-item {% if isActive %}active{% endif %}" 
+                   href="/events?category={{ category.id }}"
+                   {% if isActive %}style="background-color: {{ category.couleur }}; color: white;"{% endif %}>
+                    <span class="me-2">{{ category.icone }}</span>
+                    {{ category.nom }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</li>

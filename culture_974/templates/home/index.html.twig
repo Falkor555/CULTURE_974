@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Accueil - Culture 974{% endblock %}
+
+{% block body %}
+<div class="row align-items-center mb-5">
+    <div class="col-lg-6">
+        <h1 class="display-4 fw-bold text-danger">Bat karé su la culture !</h1>
+        <p class="lead text-muted">
+            Bienvenue sur l'agenda officiel de l'association <strong>Culture 974</strong>.
+            Retrouvez tous les concerts, expos et ateliers de l'île intense.
+        </p>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+            {# Ce lien fonctionnera quand tu auras fait la page liste (US2.2) #}
+            <a href="{{ path('app_categories') }}" class="btn btn-primary btn-lg px-4 me-md-2">
+                Voir les catégories
+            </a>
+            <a href="#" class="btn btn-outline-secondary btn-lg px-4">
+                Prochains événements
+            </a>
+        </div>
+    </div>
+    <div class="col-lg-6 text-center">
+        <div class="p-5 rounded-3" style="background: linear-gradient(135deg, #fdcb6e 0%, #ff7675 100%); color: white;">
+            <span style="font-size: 100px;">🇷🇪</span>
+            <h3>L'esprit 974</h3>
+            <p>Partageons notre patrimoine.</p>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+                <div class="display-5 mb-3">🎸</div>
+                <h3>Concerts</h3>
+                <p>Du Maloya au Rock, vibrez au rythme de l'île.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+                <div class="display-5 mb-3">🎨</div>
+                <h3>Expositions</h3>
+                <p>Découvrez les talents artistiques locaux.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-body text-center">
+                <div class="display-5 mb-3">🛠️</div>
+                <h3>Ateliers</h3>
+                <p>Apprenez, créez et partagez votre savoir-faire.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

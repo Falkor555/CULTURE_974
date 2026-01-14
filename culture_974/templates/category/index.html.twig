@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nos Catégories - Culture 974{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">Explorer par catégorie</h1>
+
+    <div class="row">
+        {% for category in categories %}
+            <div class="col-md-3 mb-4">
+                {# Lien vers le filtrage US2.3 : /events?category={id} #}
+                <a href="/events?category={{ category.id }}" class="text-decoration-none">
+                    <div class="card h-100 shadow-sm border-0 hover-effect">
+                        <div class="card-body text-center">
+                            {# Affichage Icône + Nom  #}
+                            <div class="display-4 mb-3">{{ category.icone }}</div>
+                            <h5 class="card-title text-dark">{{ category.nom }}</h5>
+                            
+                            {# Affichage Nombre d'événements  #}
+                            <p class="text-muted small">
+                                <span class="badge bg-light text-dark border">
+                                    {{ category.events|length }} événements
+                                </span>
+                            </p>
+                        </div>
+                        {# Bandeau couleur en bas de carte #}
+                        <div class="card-footer" style="background-color: {{ category.couleur }}; height: 5px; padding: 0;"></div>
+                    </div>
+                </a>
+            </div>
+        {% else %}
+            <div class="col-12">
+                <p>Aucune catégorie trouvée.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <style>
+        .hover-effect:hover {
+            transform: translateY(-5px);
+            transition: transform 0.2s;
+            box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+        }
+    </style>
+{% endblock %}

@@ -11,16 +11,29 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/category')]
-final class CategoryController extends AbstractController
+#[Route('/categories')]
+class CategoryController extends AbstractController
 {
-    #[Route(name: 'app_category_index', methods: ['GET'])]
+    // US2.2 : Liste des catégories (Vue Visiteur avec Cartes)
+    // J'ai gardé le nom de TA route : 'app_categories'
+    #[Route('/', name: 'app_categories', methods: ['GET'])]
     public function index(CategoryRepository $categoryRepository): Response
     {
         return $this->render('category/index.html.twig', [
             'categories' => $categoryRepository->findAll(),
         ]);
     }
+
+    // US2.4 : Méthode pour le menu déroulant (Ta fonctionnalité)
+    public function navbar(CategoryRepository $categoryRepository): Response
+    {
+        return $this->render('category/_navbar.html.twig', [
+            'categories' => $categoryRepository->findAll(),
+        ]);
+    }
+
+    // --- FONCTIONNALITÉS ADMIN (Venu du MAIN) ---
+    // J'ai adapté les routes pour ne pas casser ton travail
 
     #[Route('/new', name: 'app_category_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
@@ -33,7 +46,7 @@ final class CategoryController extends AbstractController
             $entityManager->persist($category);
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_categories', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('category/new.html.twig', [
@@ -59,7 +72,7 @@ final class CategoryController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
 
-            return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
+            return $this->redirectToRoute('app_categories', [], Response::HTTP_SEE_OTHER);
         }
 
         return $this->render('category/edit.html.twig', [
@@ -76,6 +89,6 @@ final class CategoryController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('app_category_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_categories', [], Response::HTTP_SEE_OTHER);
     }
 }

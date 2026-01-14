@@ -1,53 +1,102 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
     <head>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{% block title %}Culture 974{% endblock %}</title>
-
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% block title %}Culture 974 - L'agenda Péi{% endblock %}</title>
+        
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>🌋</text></svg>">
-
-        {# Intégration de Google Fonts pour un look plus moderne #}
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        
+        {# Google Fonts: Poppins #}
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+        
+        {# Bootstrap 5 CSS #}
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        {# FontAwesome (Récupéré du main) #}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-
+        
+        {# Styles Personnalisés 974 #}
+        <style>
+            :root {
+                --reunion-blue: #007bff;
+                --reunion-red: #d63031;
+                --reunion-yellow: #fdcb6e;
+            }
+            body {
+                font-family: 'Poppins', sans-serif;
+                background-color: #f8f9fa;
+                display: flex;
+                flex-direction: column;
+                min-height: 100vh;
+            }
+            .navbar-974 {
+                background: linear-gradient(90deg, #d63031 0%, #e17055 100%);
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+            .navbar-brand, .nav-link {
+                color: white !important;
+                font-weight: 600;
+            }
+            .footer-974 {
+                margin-top: auto;
+                background-color: #2d3436;
+                color: white;
+                padding: 20px 0;
+            }
+        </style>
+        
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        {# Barre de Navigation #}
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 shadow-sm">
+        {# Navigation #}
+        <nav class="navbar navbar-expand-lg navbar-974 sticky-top">
             <div class="container">
-                <a class="navbar-brand" href="{{ path('app_event_index') }}">🥁 Culture 974</a>
+                <a class="navbar-brand" href="/">
+                    🌋 Culture 974
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
+                    <ul class="navbar-nav ms-auto align-items-center">
                         <li class="nav-item">
+                            <a class="nav-link" href="/">Accueil</a>
+                        </li>
+                        
+                        {# TA partie dynamique Catégorie (US2.4) #}
+                        {{ render(controller('App\\Controller\\CategoryController::navbar')) }}
+                        
+                        {# Liens fusionnés depuis MAIN #}
+                        <li class="nav-item">
+                            {# Note: Si cette route n'existe pas encore chez toi, ça fera une erreur. 
+                               Laisse-le commenté ou assure-toi d'avoir récupéré le travail de Dev 1 #}
                             <a class="nav-link" href="{{ path('app_event_index') }}">Événements</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link btn btn-outline-light btn-sm ms-lg-2" href="{{ path('app_event_new') }}">Publier</a>
+                            <a class="nav-link btn btn-outline-light btn-sm ms-lg-2 rounded-pill px-3" href="{{ path('app_event_new') }}">Publier</a>
+                        </li>
+                        <li class="nav-item ms-2">
+                             <a class="nav-link" href="#">Connexion</a>
                         </li>
                     </ul>
                 </div>
             </div>
         </nav>
 
-        {# Contenu principal #}
-        <main class="container">
+        {# Contenu Principal #}
+        <main class="container my-5">
             {% block body %}{% endblock %}
         </main>
 
         {# Footer #}
-        <footer class="text-center py-4 mt-5 border-top text-muted">
-            <p>&copy; {{ "now"|date("Y") }} - Culture 974 : La Réunion en mouvement</p>
+        <footer class="footer-974 text-center">
+            <div class="container">
+                <p class="mb-0">© {{ 'now'|date('Y') }} Association Culture 974 - La Réunion lé la.</p>
+            </div>
         </footer>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+        {# Bootstrap 5 JS Bundle #}
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}

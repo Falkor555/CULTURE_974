@@ -1,44 +1,75 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Event{% endblock %}
+{% block title %}{{ event.titre }} - Culture 974{% endblock %}
 
 {% block body %}
-    <h1>Event</h1>
+<div class="container py-5">
+    {# Bouton Retour #}
+    <div class="mb-4">
+        <a href="{{ path('app_event_index') }}" class="text-decoration-none text-muted">
+            <i class="fas fa-arrow-left me-2"></i>Retour à la liste
+        </a>
+    </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ event.id }}</td>
-            </tr>
-            <tr>
-                <th>Titre</th>
-                <td>{{ event.titre }}</td>
-            </tr>
-            <tr>
-                <th>Description</th>
-                <td>{{ event.description }}</td>
-            </tr>
-            <tr>
-                <th>Date</th>
-                <td>{{ event.date ? event.date|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Lieu</th>
-                <td>{{ event.lieu }}</td>
-            </tr>
-            <tr>
-                <th>Image</th>
-                <td>{{ event.image }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="row g-5">
+        {# Colonne Gauche : Image #}
+        <div class="col-lg-7">
+            <div class="position-relative">
+                {% if event.image %}
+                    <img src="{{ event.image }}" class="img-fluid rounded-4 shadow-sm w-100" alt="{{ event.titre }}" style="max-height: 500px; object-fit: cover;">
+                {% else %}
+                    <div class="bg-light d-flex align-items-center justify-content-center rounded-4 shadow-sm" style="height: 400px;">
+                        <i class="fas fa-image fa-4x text-muted opacity-25"></i>
+                    </div>
+                {% endif %}
 
-    <a href="{{ path('app_inscription', {'eventId': event.id}) }}">S'inscrire à cet événement</a>
+                {# Badge Date flottant sur l'image #}
+                <div class="position-absolute top-0 start-0 m-3">
+                    <span class="event-date-badge shadow-sm">
+                        <i class="far fa-calendar-alt me-2"></i>{{ event.date ? event.date|date('d F Y') : 'À venir' }}
+                    </span>
+                </div>
+            </div>
+        </div>
 
-    <a href="{{ path('app_event_index') }}">back to list</a>
+        {# Colonne Droite : Infos #}
+        <div class="col-lg-5">
+            <div class="ps-lg-4">
+                <h1 class="display-5 fw-bold mb-3" style="color: #1a1a1a;">{{ event.titre }}</h1>
 
-    <a href="{{ path('app_event_edit', {'id': event.id}) }}">edit</a>
+                <div class="d-flex align-items-center mb-4 text-info">
+                    <i class="fas fa-map-marker-alt fa-lg me-2 text-danger"></i>
+                    <span class="h5 mb-0 fw-normal text-secondary">{{ event.lieu }}</span>
+                </div>
 
-    {{ include('event/_delete_form.html.twig') }}
+                <hr class="my-4 opacity-10">
+
+                <h5 class="fw-bold mb-3">À propos de cet événement</h5>
+                <p class="lead text-secondary mb-5" style="line-height: 1.8;">
+                    {{ event.description|nl2br }}
+                </p>
+
+                <div class="card bg-light border-0 rounded-4 p-4 mb-5">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fas fa-clock text-volcan-soft me-3 fa-lg"></i>
+                        <div>
+                            <small class="text-muted d-block">Horaire</small>
+                            <strong>{{ event.date ? event.date|date('H:i') : '--:--' }}</strong>
+                        </div>
+                    </div>
+                </div>
+
+                {# Actions Admin #}
+                <div class="d-flex gap-3 align-items-center pt-4 border-top">
+                    <a href="{{ path('app_event_edit', {'id': event.id}) }}" class="btn btn-primary px-4 shadow-sm">
+                        <i class="fas fa-edit me-2"></i>Modifier
+                    </a>
+                    <div class="ms-auto">
+                        {{ include('event/_delete_form.html.twig') }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inscription - {{ event.titre }}{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+                {# Header coloré #}
+                <div class="p-4 text-white text-center" style="background-color: var(--volcan-soft);">
+                    <h2 class="h4 mb-1">Inscription</h2>
+                    <p class="mb-0 opacity-75">{{ event.titre }}</p>
+                </div>
+
+                <div class="card-body p-4 p-md-5">
+                    {{ form_start(form) }}
+                        <div class="mb-3">
+                            {{ form_label(form.nom, 'Nom Complet', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                            {{ form_widget(form.nom, {'attr': {'class': 'form-control rounded-3', 'placeholder': 'Votre nom'}}) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(form.email, 'Email', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                            {{ form_widget(form.email, {'attr': {'class': 'form-control rounded-3', 'placeholder': 'exemple@mail.re'}}) }}
+                        </div>
+                        <div class="mb-3">
+                            {{ form_label(form.telephone, 'Téléphone', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                            {{ form_widget(form.telephone, {'attr': {'class': 'form-control rounded-3', 'placeholder': '0692 ...'}}) }}
+                        </div>
+                        <div class="mb-4">
+                            {{ form_label(form.nombrePlaces, 'Nombre de places', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                            {{ form_widget(form.nombrePlaces, {'attr': {'class': 'form-control rounded-3'}}) }}
+                        </div>
+
+                        <button class="btn btn-primary w-100 py-2 fw-bold shadow-sm" type="submit">
+                            <i class="fas fa-check-circle me-2"></i>Confirmer mon inscription
+                        </button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="{{ path('app_event_index') }}" class="text-muted text-decoration-none">
+                    <i class="fas fa-times me-1"></i> Annuler
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

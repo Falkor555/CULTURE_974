@@ -23,7 +23,7 @@ class EventType extends AbstractType
             ->add('image')
             ->add('category', EntityType::class, [
                 'class' => Category::class,
-                'choice_label' => 'id',
+                'choice_label' => 'nom',
             ])
         ;
     }

@@ -1,43 +1,61 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Event index{% endblock %}
+{% block title %}Evenements Culture 974{% endblock %}
+{% block stylesheets %}
+ <link rel="stylesheet" href="{{ asset('assets/css/style.css')}}"/>{% endblock %}
+
 
 {% block body %}
-    <h1>Event index</h1>
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Bienvenue chez Culture 974</h1>
+        <a href="{{ path('app_event_new') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Créer un Event
+        </a>
+    </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Titre</th>
-                <th>Description</th>
-                <th>Date</th>
-                <th>Lieu</th>
-                <th>Image</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
+    <div class="row">
         {% for event in events %}
-            <tr>
-                <td>{{ event.id }}</td>
-                <td>{{ event.titre }}</td>
-                <td>{{ event.description }}</td>
-                <td>{{ event.date ? event.date|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ event.lieu }}</td>
-                <td>{{ event.image }}</td>
-                <td>
-                    <a href="{{ path('app_event_show', {'id': event.id}) }}">show</a>
-                    <a href="{{ path('app_event_edit', {'id': event.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="7">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 shadow-sm">
+                    {# Affichage de l'image #}
+                    {% if event.image %}
+                        <img src="{{ event.image }}" class="card-img-top" alt="{{ event.titre }}" style="height: 200px; object-fit: cover;">
+                    {% else %}
+                        <img src="https://via.placeholder.com/400x200?text=Pas+d'image" class="card-img-top" alt="Image par défaut">
+                    {% endif %}
 
-    <a href="{{ path('app_event_new') }}">Create new</a>
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">{{ event.titre }}</h5>
+
+                        {# Badge pour le lieu #}
+                        <p class="text-muted small">
+                            <i class="fas fa-map-marker-alt"></i> {{ event.lieu }}
+                        </p>
+
+                        <p class="card-text text-truncate">{{ event.description }}</p>
+
+                        <p class="card-text">
+                            <strong><i class="far fa-calendar-alt"></i></strong>
+                            {{ event.date ? event.date|date('d/m/Y H:i') : 'Date non fixée' }}
+                        </p>
+                    </div>
+
+<a href="{{ path('app_event_inscription', {'id': event.id}) }}" class="btn btn-primary w-100 rounded-pill">
+    <i class="fas fa-ticket-alt me-2"></i>S'inscrire
+</a>
+
+                    <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between">
+                        <a href="{{ path('app_event_show', {'id': event.id}) }}" class="btn btn-outline-info btn-sm">Détails</a>
+                        <a href="{{ path('app_event_edit', {'id': event.id}) }}" class="btn btn-outline-warning btn-sm">Modifier</a>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="col-12">
+                <p class="alert alert-info text-center">Aucun événement n'est prévu pour le moment.</p>
+            </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

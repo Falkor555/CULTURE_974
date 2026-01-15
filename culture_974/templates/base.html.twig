@@ -100,35 +100,17 @@
                         {# Séparateur vertical visuel #}
                         <li class="nav-item d-none d-lg-block mx-2 text-white-50">|</li>
 
-                        {% if app.user %}
-                            {# CAS 1 : Utilisateur Connecté #}
-                            
-                            {# Affiche Email + Icône #}
-                            <li class="nav-item user-info d-flex align-items-center me-2">
-                                <span class="nav-link text-white p-0" title="Connecté en tant que {{ app.user.userIdentifier }}">
-                                    <i class="fa-solid fa-user-circle me-2"></i>
-                                    {{ app.user.userIdentifier }}
-                                </span>
-                            </li>
-
-                            {# Bouton Déconnexion #}
-                            <li class="nav-item">
-                                <a class="nav-link text-warning fw-bold" href="{{ path('app_logout') }}">
-                                    <i class="fa-solid fa-right-from-bracket"></i>
-                                    <span class="d-lg-none ms-2">Déconnexion</span> {# Texte visible uniquement sur mobile #}
+                        <li class="nav-item ms-2">
+                            {% if app.user %}
+                                <a class="nav-link btn btn-warning btn-sm rounded-pill px-3 me-2" href="{{ path('app_admin_dashboard') }}">
+                                    📊 Dashboard
                                 </a>
-                            </li>
-
-                        {% else %}
-                            {# CAS 2 : Visiteur (Non connecté) #}
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ path('app_login') }}">
-                                    <i class="fa-solid fa-right-to-bracket me-1"></i>
+                            {% else %}
+                                <a class="nav-link btn btn-outline-light btn-sm rounded-pill px-3" href="{{ path('app_login') }}">
                                     Connexion
                                 </a>
-                            </li>
-                        {% endif %}
-                        
+                            {% endif %}
+                        </li>
                     </ul>
                 </div>
             </div>

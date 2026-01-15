@@ -1,68 +1,105 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Evenements Culture 974{% endblock %}
-{% block stylesheets %}
- <link rel="stylesheet" href="{{ asset('assets/css/style.css')}}"/>{% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css')}}"/>
+    <style>
+        /* Style pour masquer l'icône d'image cassée par défaut du navigateur */
+        img[src=""], img:not([src]) { opacity: 0; }
+        .img-fallback {
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Bienvenue chez Culture 974</h1>
+        <h1 class="fw-bold">Bienvenue chez Culture 974</h1>
 
         {% if is_granted('ROLE_USER') %}
-        <a href="{{ path('app_event_new') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Créer un Event
-        </a>
+            <a href="{{ path('app_event_new') }}" class="btn btn-primary shadow-sm">
+                <i class="fas fa-plus me-1"></i> Créer un Event
+            </a>
         {% endif %}
-
     </div>
 
     <div class="row">
         {% for event in events %}
             <div class="col-md-4 mb-4">
-                <div class="card h-100 shadow-sm">
-                    {# Affichage de l'image #}
-                    {% if event.image %}
-                        <img src="{{ event.image }}" class="card-img-top" alt="{{ event.titre }}" style="height: 200px; object-fit: cover;">
-                    {% else %}
-                        <img src="https://via.placeholder.com/400x200?text=Pas+d'image" class="card-img-top" alt="Image par défaut">
-                    {% endif %}
-
-                    <div class="card-body">
-                        <h5 class="card-title text-primary">{{ event.titre }}</h5>
-
-                        {# Badge pour le lieu #}
-                        <p class="text-muted small">
-                            <i class="fas fa-map-marker-alt"></i> {{ event.lieu }}
-                        </p>
-
-                        <p class="card-text text-truncate">{{ event.description }}</p>
-
-                        <p class="card-text">
-                            <strong><i class="far fa-calendar-alt"></i></strong>
-                            {{ event.date ? event.date|date('d/m/Y H:i') : 'Date non fixée' }}
-                        </p>
-                    </div>
-
-<a href="{{ path('app_event_inscription', {'id': event.id}) }}" class="btn btn-primary w-100 rounded-pill">
-    <i class="fas fa-ticket-alt me-2"></i>S'inscrire
-</a>
-
-                    <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between">
-
-                        <a href="{{ path('app_event_show', {'id': event.id}) }}" class="btn btn-outline-info btn-sm">Détails</a>
-
-                        {% if is_granted('ROLE_USER') %}
-                            <a href="{{ path('app_event_edit', {'id': event.id}) }}" class="btn btn-outline-warning btn-sm">Modifier</a>
+                <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden">
+                    {# Gestion de l'image avec fallback JS si le lien est cassé #}
+                    <div class="position-relative bg-light" style="height: 200px;">
+                        {% if event.image %}
+                            <img src="{{ event.image }}"
+                                class="w-100 h-100"
+                                alt="{{ event.titre }}"
+                                style="object-fit: cover;"
+                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                            {# Ce div ne s'affiche que si l'image ci-dessus échoue (via le JS onerror) #}
+                            <div class="img-fallback w-100 h-100 d-none flex-column text-muted">
+                                <i class="fas fa-image fa-2x mb-2 opacity-25"></i>
+                                <small>Image non disponible</small>
+                            </div>
+                        {% else %}
+                            <div class="img-fallback w-100 h-100 d-flex flex-column text-muted">
+                                <i class="fas fa-mountain fa-2x mb-2 opacity-25"></i>
+                                <small>Pas d'image</small>
+                            </div>
                         {% endif %}
                     </div>
 
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold text-primary">{{ event.titre }}</h5>
+
+                        <p class="text-muted small mb-2">
+                            <i class="fas fa-map-marker-alt text-danger me-1"></i> {{ event.lieu }}
+                        </p>
+
+                        <p class="card-text text-truncate text-secondary" style="max-height: 3rem;">
+                            {{ event.description }}
+                        </p>
+
+                        <p class="card-text mb-0 small">
+                            <span class="badge bg-light text-dark border">
+                                <i class="far fa-calendar-alt me-1 text-primary"></i>
+                                {{ event.date ? event.date|date('d/m/Y H:i') : 'Date non fixée' }}
+                            </span>
+                        </p>
+                    </div>
+
+                    <div class="card-footer bg-white border-top-0 d-flex flex-wrap justify-content-between align-items-center gap-2 pb-3 pt-0">
+                        {# Groupe de boutons de consultation/édition #}
+                        <div class="d-flex gap-1">
+                            <a href="{{ path('app_event_show', {'id': event.id}) }}" class="btn btn-outline-info btn-sm rounded-pill px-3">
+                                Détails
+                            </a>
+
+                            {% if is_granted('ROLE_USER') %}
+                                <a href="{{ path('app_event_edit', {'id': event.id}) }}" class="btn btn-outline-warning btn-sm rounded-pill" title="Modifier">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            {% endif %}
+                        </div>
+
+                        {# Bouton d'action principale compact #}
+                        <a href="{{ path('app_event_inscription', {'id': event.id}) }}" class="btn btn-primary btn-sm rounded-pill px-3 shadow-sm">
+                            <i class="fas fa-ticket-alt me-1"></i> S'inscrire
+                        </a>
+                    </div>
                 </div>
             </div>
         {% else %}
             <div class="col-12">
-                <p class="alert alert-info text-center">Aucun événement n'est prévu pour le moment.</p>
+                <div class="alert alert-light border text-center py-5">
+                    <i class="fas fa-calendar-times fa-3x mb-3 opacity-25"></i>
+                    <p class="mb-0">Aucun événement n'est prévu pour le moment.</p>
+                </div>
             </div>
         {% endfor %}
     </div>

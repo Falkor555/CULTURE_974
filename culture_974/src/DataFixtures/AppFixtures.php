@@ -4,13 +4,31 @@ namespace App\DataFixtures;
 
 use App\Entity\Category;
 use App\Entity\Event;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
+    public function __construct(
+        private UserPasswordHasherInterface $passwordHasher
+    ) {
+    }
+
     public function load(ObjectManager $manager): void
     {
+        // --- 0. CRÉATION DE L'UTILISATEUR ADMIN ---
+        
+        $admin = new User();
+        $admin->setEmail('admin@culture974.fr');
+        $admin->setRoles(['ROLE_ADMIN']); // Optionnel : donner le rôle admin
+        
+        $hashedPassword = $this->passwordHasher->hashPassword($admin, 'admin123');
+        $admin->setPassword($hashedPassword);
+        
+        $manager->persist($admin);
+        
         // --- 1. CRÉATION DES CATÉGORIES (US2.1) ---
         
         $categories = [];
@@ -31,9 +49,8 @@ class AppFixtures extends Fixture
             $categories[$nom] = $category;
         }
 
-        // --- 2. CRÉATION DES ÉVÉNEMENTS (POUR TESTER TES FILTRES) ---
+        // --- 2. CRÉATION DES ÉVÉNEMENTS ---
 
-        // Événement 1 : Un Concert
         $event1 = new Event();
         $event1->setTitre('Sakifo Musik Festival');
         $event1->setDescription('Le plus grand festival de la Réunion à Saint-Pierre.');
@@ -42,7 +59,6 @@ class AppFixtures extends Fixture
         $event1->setCategory($categories['Concert']);
         $manager->persist($event1);
 
-        // Événement 2 : Un autre Concert (pour tester le compteur)
         $event2 = new Event();
         $event2->setTitre('Concert Maloya Trad');
         $event2->setDescription('Soirée kabar avec les anciens.');
@@ -51,7 +67,6 @@ class AppFixtures extends Fixture
         $event2->setCategory($categories['Concert']);
         $manager->persist($event2);
 
-        // Événement 3 : Une Expo
         $event3 = new Event();
         $event3->setTitre('Art contemporain 974');
         $event3->setDescription('Exposition des nouveaux talents péi.');
@@ -60,7 +75,6 @@ class AppFixtures extends Fixture
         $event3->setCategory($categories['Expo']);
         $manager->persist($event3);
 
-        // Événement 4 : Un Atelier
         $event4 = new Event();
         $event4->setTitre('Initiation Tressage Vacoa');
         $event4->setDescription('Apprenez à tresser votre propre bertel.');

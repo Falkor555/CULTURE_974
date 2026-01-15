@@ -1,11 +1,49 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Event{% endblock %}
+{% block title %}Nouveau - Culture 974{% endblock %}
+
+{# Optionnel : force le thème Bootstrap ici si non configuré globalement #}
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
 
 {% block body %}
-    <h1>Create new Event</h1>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            {# Lien Retour #}
+            <div class="mb-4">
+                <a href="{{ path('app_event_index') }}" class="text-decoration-none text-muted">
+                    <i class="fas fa-arrow-left me-2"></i>Retour à la liste
+                </a>
+            </div>
 
-    {{ include('event/_form.html.twig') }}
+            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+                {# Header avec un dégradé ou une couleur douce #}
+                <div class="card-header bg-white border-bottom p-4">
+                    <div class="d-flex align-items-center">
+                        <div class="icon-shape bg-primary-light text-volcan-soft rounded-circle p-3 me-3">
+                            <i class="fas fa-plus-circle fa-lg"></i>
+                        </div>
+                        <div>
+                            <h1 class="h3 fw-bold mb-1 text-dark">Publier un événement</h1>
+                            <p class="text-muted mb-0 small">Partagez une nouvelle sortie culturelle avec la communauté.</p>
+                        </div>
+                    </div>
+                </div>
 
-    <a href="{{ path('app_event_index') }}">back to list</a>
+                <div class="card-body p-4 p-md-5">
+                    {# Inclusion du formulaire #}
+                    {{ include('event/_form.html.twig', {'button_label': 'Créer l\'événement'}) }}
+                </div>
+            </div>
+
+            {# Petite aide visuelle sous la carte #}
+            <div class="mt-4 p-3 bg-light rounded-3 border-start border-volcan-soft border-4">
+                <small class="text-muted">
+                    <i class="fas fa-info-circle me-1"></i>
+                    L'événement sera immédiatement visible sur la page d'accueil après validation.
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

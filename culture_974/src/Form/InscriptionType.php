@@ -6,6 +6,7 @@ use App\Entity\Event;
 use App\Entity\Inscription;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -17,14 +18,14 @@ class InscriptionType extends AbstractType
             ->add('nom')
             ->add('email')
             ->add('telephone')
-            ->add('nombrePlaces')
-            // ->add('createdAt', null, [
-            //     'widget' => 'single_text',
-            // ])
-            // ->add('event', EntityType::class, [
-            //     'class' => Event::class,
-            //     'choice_label' => 'nom',
-            // ])
+            ->add('nombrePlaces', IntegerType::class, [
+                'label' => 'Nombre de places',
+                'attr' => [
+                    'min' => 1,
+                    'max' => 100,
+                    'step' => 1,
+                ],
+            ])
         ;
     }
 

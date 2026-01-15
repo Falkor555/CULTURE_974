@@ -6,6 +6,8 @@ use App\Repository\EventRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 class Event
@@ -22,6 +24,8 @@ class Event
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'La date est obligatoire')]
+    #[Assert\Callback([self::class, 'validateHalfHour'])]
     private ?\DateTimeImmutable $date = null;
 
     #[ORM\Column(length: 255)]
@@ -43,6 +47,21 @@ class Event
     public function __construct()
     {
         $this->inscriptions = new ArrayCollection();
+    }
+
+    /**
+     * Valide que l'heure est sur une demi-heure (00 ou 30 minutes)
+     */
+    public static function validateHalfHour($object, ExecutionContextInterface $context): void
+    {
+        if ($object instanceof self && $object->date !== null) {
+            $minutes = (int) $object->date->format('i');
+            if ($minutes !== 0 && $minutes !== 30) {
+                $context->buildViolation('L\'heure doit être sur une demi-heure (00 ou 30 minutes)')
+                    ->atPath('date')
+                    ->addViolation();
+            }
+        }
     }
 
     public function getId(): ?int

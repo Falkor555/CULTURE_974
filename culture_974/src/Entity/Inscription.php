@@ -4,8 +4,10 @@ namespace App\Entity;
 
 use App\Repository\InscriptionRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: InscriptionRepository::class)]
+#[ORM\HasLifecycleCallbacks]
 class Inscription
 {
     #[ORM\Id]
@@ -23,6 +25,13 @@ class Inscription
     private ?string $telephone = null;
 
     #[ORM\Column]
+    #[Assert\NotBlank(message: 'Le nombre de places est obligatoire')]
+    #[Assert\Positive(message: 'Le nombre de places doit être supérieur à 0')]
+    #[Assert\Range(
+        min: 1,
+        max: 100,
+        notInRangeMessage: 'Le nombre de places doit être entre {{ min }} et {{ max }}'
+    )]
     private ?int $nombrePlaces = null;
 
     #[ORM\Column]
@@ -31,6 +40,12 @@ class Inscription
     #[ORM\ManyToOne(inversedBy: 'inscriptions')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Event $event = null;
+
+    #[ORM\PrePersist]
+    public function setCreatedAtValue(): void
+    {
+        $this->createdAt = new \DateTimeImmutable();
+    }
 
     public function getId(): ?int
     {
@@ -83,12 +98,6 @@ class Inscription
         $this->nombrePlaces = $nombrePlaces;
 
         return $this;
-    }
-
-    public function __construct()
-    {
-        // Définit la date et l'heure actuelles au moment de la création de l'objet
-        $this->createdAt = new \DateTimeImmutable();
     }
 
     public function getCreatedAt(): ?\DateTimeImmutable

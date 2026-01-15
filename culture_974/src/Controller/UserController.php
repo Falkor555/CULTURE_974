@@ -3,14 +3,17 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
-#[Route('/login')]
+
+// #[Route('/login')]
 final class UserController extends AbstractController
 {
     // public function __construct(
@@ -38,9 +41,14 @@ final class UserController extends AbstractController
     //     ]);
     // }
 
-    #[Route('/', name: 'app_login')]
+    #[Route('/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
+        // Si l'utilisateur est déjà connecté, rediriger vers le dashboard
+        if ($this->getUser()) {
+            return $this->redirectToRoute('app_admin_dashboard');
+        }
+
         // Récupérer l'erreur de connexion s'il y en a une
         $error = $authenticationUtils->getLastAuthenticationError();
 
@@ -57,5 +65,35 @@ final class UserController extends AbstractController
     public function logout(): void
     {
         throw new \LogicException('This method can be blank - it will be intercepted by the logout key on your firewall.');
+    }
+
+    #[Route('/admin/dashboard', name: 'app_admin_dashboard')]
+    #[IsGranted('ROLE_USER')]
+    public function dashboard(EventRepository $eventRepository): Response
+    {
+        // Récupérer tous les événements avec leurs inscriptions, triés par date (du plus proche au plus lointain)
+        $events = $eventRepository->findBy([], ['date' => 'ASC']);
+        
+        // Calculer les statistiques pour chaque événement
+        $eventStats = [];
+        foreach ($events as $event) {
+            $totalPlaces = 0;
+            $totalInscriptions = 0;
+            
+            foreach ($event->getInscriptions() as $inscription) {
+                $totalPlaces += $inscription->getNombrePlaces();
+                $totalInscriptions++;
+            }
+            
+            $eventStats[] = [
+                'event' => $event,
+                'totalInscriptions' => $totalInscriptions,
+                'totalPlaces' => $totalPlaces,
+            ];
+        }
+        
+        return $this->render('user/dashboard.html.twig', [
+            'eventStats' => $eventStats,
+        ]);
     }
 }

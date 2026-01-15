@@ -81,7 +81,15 @@
 
 
                         <li class="nav-item ms-2">
-                             <a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
+                            {% if app.user %}
+                                <a class="nav-link btn btn-warning btn-sm rounded-pill px-3 me-2" href="{{ path('app_admin_dashboard') }}">
+                                    📊 Dashboard
+                                </a>
+                            {% else %}
+                                <a class="nav-link btn btn-outline-light btn-sm rounded-pill px-3" href="{{ path('app_login') }}">
+                                    Connexion
+                                </a>
+                            {% endif %}
                         </li>
                     </ul>
                 </div>

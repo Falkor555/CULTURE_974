@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Tableau de bord - Culture 974{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Dashboard Administrateur</h1>
+        <a href="{{ path('app_logout') }}" class="btn btn-danger">Déconnexion</a>
+    </div>
+
+    <div class="alert alert-info">
+        <strong>Bienvenue {{ app.user.email }}</strong>
+    </div>
+
+    <h2 class="mb-4">📊 Statistiques des inscriptions par événement</h2>
+
+    {% if eventStats is empty %}
+        <div class="alert alert-warning">
+            Aucun événement trouvé.
+        </div>
+    {% else %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Événement</th>
+                        <th>Date</th>
+                        <th>Lieu</th>
+                        <th>Catégorie</th>
+                        <th class="text-center">Nombre d'inscriptions</th>
+                        <th class="text-center">Places réservées</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stat in eventStats %}
+                        <tr>
+                            <td>
+                                <strong>{{ stat.event.titre }}</strong>
+                            </td>
+                            <td>{{ stat.event.date|date('d/m/Y') }}</td>
+                            <td>{{ stat.event.lieu }}</td>
+                            <td>
+                                <span class="badge" style="background-color: {{ stat.event.category.couleur }}">
+                                    {{ stat.event.category.icone }} {{ stat.event.category.nom }}
+                                </span>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-primary fs-6">{{ stat.totalInscriptions }}</span>
+                            </td>
+                            <td class="text-center">
+                                <span class="badge bg-success fs-6">{{ stat.totalPlaces }}</span>
+                            </td>
+                            <td>
+                                <a href="{{ path('app_event_show', {'id': stat.event.id}) }}" class="btn btn-sm btn-info">
+                                    👁️ Voir
+                                </a>
+                                <a href="{{ path('app_event_edit', {'id': stat.event.id}) }}" class="btn btn-sm btn-warning">
+                                    ✏️ Modifier
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-4">
+                <div class="card text-center bg-light">
+                    <div class="card-body">
+                        <h5 class="card-title">Total événements</h5>
+                        <p class="display-4">{{ eventStats|length }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center bg-light">
+                    <div class="card-body">
+                        <h5 class="card-title">Total inscriptions</h5>
+                        <p class="display-4">{{ eventStats|reduce((carry, stat) => carry + stat.totalInscriptions, 0) }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card text-center bg-light">
+                    <div class="card-body">
+                        <h5 class="card-title">Total places</h5>
+                        <p class="display-4">{{ eventStats|reduce((carry, stat) => carry + stat.totalPlaces, 0) }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="mt-4">
+        <a href="{{ path('app_event_new') }}" class="btn btn-success">➕ Créer un nouvel événement</a>
+        <a href="{{ path('app_categories') }}" class="btn btn-secondary">📁 Gérer les catégories</a>
+        <a href="{{ path('app_home') }}" class="btn btn-primary">🏠 Retour à l'accueil</a>
+    </div>
+</div>
+{% endblock %}

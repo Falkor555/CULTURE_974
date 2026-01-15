@@ -1,4 +1,29 @@
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    <div class="row">
+        {# Nom de la catégorie #}
+        <div class="col-12 mb-3">
+            {{ form_label(form.nom, 'Nom de la catégorie', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+            {{ form_widget(form.nom, {'attr': {'class': 'form-control rounded-3', 'placeholder': 'Ex: Concerts, Sport, Gastronomie...'}}) }}
+            <div class="text-danger small">{{ form_errors(form.nom) }}</div>
+        </div>
+
+        {# Icône (Emoji) #}
+        <div class="col-md-6 mb-3">
+            {{ form_label(form.icone, 'Icône (Emoji)', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+            {{ form_widget(form.icone, {'attr': {'class': 'form-control rounded-3', 'placeholder': 'Ex: 🎸'}}) }}
+        </div>
+
+        {# Couleur (Sélecteur HTML5) #}
+        <div class="col-md-6 mb-3">
+            {{ form_label(form.couleur, 'Couleur associée', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+            {{ form_widget(form.couleur, {'attr': {'class': 'form-control form-control-color w-100 rounded-3', 'title': 'Choisir une couleur'}}) }}
+        </div>
+
+        {# Bouton de validation #}
+        <div class="col-12 mt-3">
+            <button class="btn btn-primary w-100 py-2 shadow-sm rounded-pill fw-bold">
+                <i class="fas fa-save me-2"></i>{{ button_label|default('Enregistrer') }}
+            </button>
+        </div>
+    </div>
 {{ form_end(form) }}

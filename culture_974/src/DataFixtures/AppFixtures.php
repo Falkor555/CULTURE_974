@@ -6,6 +6,8 @@ use App\Entity\Category;
 use App\Entity\Event;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
+use App\Entity\User;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class AppFixtures extends Fixture
 {
@@ -68,6 +70,13 @@ class AppFixtures extends Fixture
         $event4->setLieu('Saint-Philippe');
         $event4->setCategory($categories['Atelier']);
         $manager->persist($event4);
+
+        $admin = new User();
+        $admin->setEmail('admin@culture974.fr');
+        
+        // $hashedPassword = $this->passwordHasher->hashPassword($admin, 'admin123');
+        $admin->setPassword('admin123');
+        $manager->persist($admin);
 
         $manager->flush();
     }

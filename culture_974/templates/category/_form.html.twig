@@ -1,4 +1,6 @@
+{# Le form_start génère la balise <form> #}
 {{ form_start(form) }}
+
     <div class="row">
         {# Nom de la catégorie #}
         <div class="col-12 mb-3">
@@ -11,19 +13,29 @@
         <div class="col-md-6 mb-3">
             {{ form_label(form.icone, 'Icône (Emoji)', {'label_attr': {'class': 'form-label fw-bold'}}) }}
             {{ form_widget(form.icone, {'attr': {'class': 'form-control rounded-3', 'placeholder': 'Ex: 🎸'}}) }}
+            <div class="form-text small">Utilisez un emoji (Win + . ou Ctrl + Cmd + Espace).</div>
         </div>
 
-        {# Couleur (Sélecteur HTML5) #}
+        {# Couleur (Mélange : Design Main + Ta logique Texte) #}
         <div class="col-md-6 mb-3">
-            {{ form_label(form.couleur, 'Couleur associée', {'label_attr': {'class': 'form-label fw-bold'}}) }}
-            {{ form_widget(form.couleur, {'attr': {'class': 'form-control form-control-color w-100 rounded-3', 'title': 'Choisir une couleur'}}) }}
+            {{ form_label(form.couleur, 'Couleur (Hexadécimal)', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+            {# On utilise ta logique de champ texte pour coller le code #}
+            {{ form_widget(form.couleur, {
+                'attr': {
+                    'class': 'form-control rounded-3', 
+                    'placeholder': '#FF0000', 
+                    'maxlength': 7
+                }
+            }) }}
+             <div class="form-text small">Code couleur hexa (ex: #d63031).</div>
         </div>
 
-        {# Bouton de validation #}
+        {# Bouton de validation (Style du main conservé) #}
         <div class="col-12 mt-3">
             <button class="btn btn-primary w-100 py-2 shadow-sm rounded-pill fw-bold">
                 <i class="fas fa-save me-2"></i>{{ button_label|default('Enregistrer') }}
             </button>
         </div>
     </div>
+
 {{ form_end(form) }}

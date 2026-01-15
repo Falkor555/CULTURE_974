@@ -4,17 +4,18 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>{% block title %}Culture 974 - L'agenda Péi{% endblock %}</title>
-
+        
+        {# Favicon Volcan #}
         <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>🌋</text></svg>">
-
+        
         {# Google Fonts: Poppins #}
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-
+        
         {# Bootstrap 5 CSS #}
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-        {# FontAwesome (Récupéré du main) #}
+        {# FontAwesome pour les icônes (User, Logout, etc.) #}
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
+        
         {# Styles Personnalisés 974 #}
         <style>
             :root {
@@ -30,12 +31,17 @@
                 min-height: 100vh;
             }
             .navbar-974 {
+                /* Dégradé Volcanique */
                 background: linear-gradient(90deg, #d63031 0%, #e17055 100%);
                 box-shadow: 0 2px 10px rgba(0,0,0,0.1);
             }
             .navbar-brand, .nav-link {
                 color: white !important;
                 font-weight: 600;
+                transition: opacity 0.3s;
+            }
+            .nav-link:hover {
+                opacity: 0.8;
             }
             .footer-974 {
                 margin-top: auto;
@@ -43,8 +49,15 @@
                 color: white;
                 padding: 20px 0;
             }
+            /* Petit ajustement pour l'avatar dans la navbar */
+            .user-info {
+                font-size: 0.9rem;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 20px;
+                padding: 5px 15px;
+            }
         </style>
-
+        
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
@@ -57,32 +70,65 @@
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ms-auto align-items-center">
                         <li class="nav-item">
                             <a class="nav-link" href="/">Accueil</a>
                         </li>
-
-                        {# TA partie dynamique Catégorie (US2.4) #}
+                        
+                        {# --- ZONE DEV 2 (TOI) : Menu Déroulant Catégories --- #}
+                        {# Utilise le Sub-Request pour afficher le menu dynamique #}
                         {{ render(controller('App\\Controller\\CategoryController::navbar')) }}
-
-                        {# Liens fusionnés depuis MAIN #}
+                        
+                        {# --- ZONE DEV 1 : Liens Événements --- #}
                         <li class="nav-item">
-                            {# Note: Si cette route n'existe pas encore chez toi, ça fera une erreur.
-                               Laisse-le commenté ou assure-toi d'avoir récupéré le travail de Dev 1 #}
                             <a class="nav-link" href="{{ path('app_event_index') }}">Événements</a>
                         </li>
 
+                        {# Bouton Publier (visible seulement si connecté, ou pour tous selon vos règles) #}
                         {% if is_granted('ROLE_USER') %}
-                        <li class="nav-item">
-                            <a class="nav-link btn btn-outline-light btn-sm ms-lg-2 rounded-pill px-3" href="{{ path('app_event_new') }}">Publier</a>
-                            {% endif %}
-                        </li>
+                            <li class="nav-item">
+                                <a class="nav-link btn btn-outline-light btn-sm ms-lg-2 rounded-pill px-3 border" href="{{ path('app_event_new') }}">
+                                    <i class="fa-solid fa-plus me-1"></i> Publier
+                                </a>
+                            </li>
+                        {% endif %}
 
+                        {# --- ZONE DEV 3 : Authentification (Nouvelle logique demandée) --- #}
+                        
+                        {# Séparateur vertical visuel #}
+                        <li class="nav-item d-none d-lg-block mx-2 text-white-50">|</li>
 
-                        <li class="nav-item ms-2">
-                             <a class="nav-link" href="{{ path('app_login') }}">Connexion</a>
-                        </li>
+                        {% if app.user %}
+                            {# CAS 1 : Utilisateur Connecté #}
+                            
+                            {# Affiche Email + Icône #}
+                            <li class="nav-item user-info d-flex align-items-center me-2">
+                                <span class="nav-link text-white p-0" title="Connecté en tant que {{ app.user.userIdentifier }}">
+                                    <i class="fa-solid fa-user-circle me-2"></i>
+                                    {{ app.user.userIdentifier }}
+                                </span>
+                            </li>
+
+                            {# Bouton Déconnexion #}
+                            <li class="nav-item">
+                                <a class="nav-link text-warning fw-bold" href="{{ path('app_logout') }}">
+                                    <i class="fa-solid fa-right-from-bracket"></i>
+                                    <span class="d-lg-none ms-2">Déconnexion</span> {# Texte visible uniquement sur mobile #}
+                                </a>
+                            </li>
+
+                        {% else %}
+                            {# CAS 2 : Visiteur (Non connecté) #}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ path('app_login') }}">
+                                    <i class="fa-solid fa-right-to-bracket me-1"></i>
+                                    Connexion
+                                </a>
+                            </li>
+                        {% endif %}
+                        
                     </ul>
                 </div>
             </div>
@@ -90,6 +136,16 @@
 
         {# Contenu Principal #}
         <main class="container my-5">
+            {# Zone pour les messages Flash (Succès/Erreur) #}
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
             {% block body %}{% endblock %}
         </main>
 

@@ -91,4 +91,19 @@ class CategoryController extends AbstractController
 
         return $this->redirectToRoute('app_categories', [], Response::HTTP_SEE_OTHER);
     }
+
+
+
+    // Ajout d'une nouvelle route pour filtrer les Events en fonction des Catégories et les affichées
+
+    // afficher les événements liés à une catégorie
+    #[Route('/{id}/events', name: 'app_category_events', methods: ['GET'])]
+    public function showEvents(Category $category): Response
+    {
+        return $this->render('category/show_events.html.twig', [
+            'category' => $category,
+            'events' => $category->getEvents(),
+        ]);
+    }
+
 }

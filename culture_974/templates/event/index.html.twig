@@ -9,9 +9,13 @@
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Bienvenue chez Culture 974</h1>
+
+        {% if is_granted('ROLE_USER') %}
         <a href="{{ path('app_event_new') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Créer un Event
         </a>
+        {% endif %}
+
     </div>
 
     <div class="row">
@@ -46,9 +50,14 @@
 </a>
 
                     <div class="card-footer bg-transparent border-top-0 d-flex justify-content-between">
+
                         <a href="{{ path('app_event_show', {'id': event.id}) }}" class="btn btn-outline-info btn-sm">Détails</a>
-                        <a href="{{ path('app_event_edit', {'id': event.id}) }}" class="btn btn-outline-warning btn-sm">Modifier</a>
+
+                        {% if is_granted('ROLE_USER') %}
+                            <a href="{{ path('app_event_edit', {'id': event.id}) }}" class="btn btn-outline-warning btn-sm">Modifier</a>
+                        {% endif %}
                     </div>
+
                 </div>
             </div>
         {% else %}

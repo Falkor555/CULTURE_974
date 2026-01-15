@@ -52,7 +52,6 @@ class AppFixtures extends Fixture
 
         // --- 3. CRÉATION DES ÉVÉNEMENTS ---
 
-        // Événement 1 : Un Concert
         $event1 = new Event();
         $event1->setTitre('Sakifo Musik Festival');
         $event1->setDescription('Le plus grand festival de la Réunion à Saint-Pierre.');
@@ -72,7 +71,6 @@ class AppFixtures extends Fixture
         $event2->setImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTUoVNmv9FZeoaXynVmsHSdl4ul389_V3jY8Q&s');
         $manager->persist($event2);
 
-        // Événement 3 : Une Expo
         $event3 = new Event();
         $event3->setTitre('Art contemporain 974');
         $event3->setDescription('Exposition des nouveaux talents péi.');
@@ -82,7 +80,6 @@ class AppFixtures extends Fixture
         $event2->setImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQf7yn6owalvF0h8u28hFRGIQNC76BshPixTQ&s');
         $manager->persist($event3);
 
-        // Événement 4 : Un Atelier
         $event4 = new Event();
         $event4->setTitre('Initiation Tressage Vacoa');
         $event4->setDescription('Apprenez à tresser votre propre bertel.');

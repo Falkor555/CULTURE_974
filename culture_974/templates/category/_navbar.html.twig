@@ -10,13 +10,20 @@
         <li><hr class="dropdown-divider"></li>
 
         {% for category in categories %}
-            {# Vérification pour US2.3 : Indication visuelle active #}
-            {% set isActive = app.request.query.get('category') == category.id %}
+            {# 
+               NOUVELLE LOGIQUE "ACTIVE" :
+               On regarde si la route actuelle est bien 'app_category_events' 
+               ET si l'id dans l'URL correspond à la catégorie de la boucle.
+            #}
+            {% set isActive = app.request.get('_route') == 'app_category_events' and app.request.get('id') == category.id %}
             
             <li>
-                {# Lien de filtrage US2.3 : /events?category={id} #}
+                {# 
+                   NOUVEAU LIEN :
+                   On pointe vers la route définie dans showEvents() du contrôleur
+                #}
                 <a class="dropdown-item {% if isActive %}active{% endif %}" 
-                   href="/events?category={{ category.id }}"
+                   href="{{ path('app_category_events', {'id': category.id}) }}"
                    {% if isActive %}style="background-color: {{ category.couleur }}; color: white;"{% endif %}>
                     <span class="me-2">{{ category.icone }}</span>
                     {{ category.nom }}

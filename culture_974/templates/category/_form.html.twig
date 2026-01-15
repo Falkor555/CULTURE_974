@@ -1,4 +1,40 @@
+{# Le form_start génère la balise <form> #}
 {{ form_start(form) }}
-    {{ form_widget(form) }}
-    <button class="btn">{{ button_label|default('Save') }}</button>
+    
+    <div class="mb-3">
+        {# Affiche les erreurs globales s'il y en a #}
+        {{ form_errors(form) }}
+    </div>
+
+    {# On affiche les champs un par un pour contrôler le design #}
+    <div class="mb-3">
+        {# Le label et l'input avec les classes Bootstrap sont gérés auto si le thème est activé, 
+           sinon on laisse form_row faire le travail standard #}
+        {{ form_row(form.nom, {'attr': {'class': 'form-control', 'placeholder': 'Ex: Théâtre'}}) }}
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            {# ON CHANGE ICI : On retire 'type': 'color' et 'form-control-color' #}
+            {{ form_row(form.couleur, {
+                'label': 'Couleur (Hexadécimal)',
+                'attr': {
+                    'class': 'form-control', 
+                    'placeholder': '#FF0000', 
+                    'maxlength': 7
+                }
+            }) }}
+            <div class="form-text">Entrez un code couleur (ex: #d63031).</div>
+        </div>
+        
+        <div class="col-md-6 mb-3">
+            {{ form_row(form.icone, {'attr': {'class': 'form-control', 'placeholder': 'Ex: 🎭'}}) }}
+            {# <div class="form-text">Utilisez un emoji (Win + . ou Ctrl + Cmd + Espace).</div> #}
+        </div>
+    </div>
+
+    <button class="btn btn-primary w-100">
+        <i class="fa-solid fa-save me-1"></i> {{ button_label|default('Sauvegarder') }}
+    </button>
+
 {{ form_end(form) }}

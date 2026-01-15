@@ -1,4 +1,3 @@
-{# templates/category/_navbar.html.twig #}
 <li class="nav-item dropdown">
     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
         Catégories
@@ -10,18 +9,11 @@
         <li><hr class="dropdown-divider"></li>
 
         {% for category in categories %}
-            {# 
-               NOUVELLE LOGIQUE "ACTIVE" :
-               On regarde si la route actuelle est bien 'app_category_events' 
-               ET si l'id dans l'URL correspond à la catégorie de la boucle.
-            #}
+            {# TA LOGIQUE ROBUSTE (HEAD) #}
             {% set isActive = app.request.get('_route') == 'app_category_events' and app.request.get('id') == category.id %}
             
             <li>
-                {# 
-                   NOUVEAU LIEN :
-                   On pointe vers la route définie dans showEvents() du contrôleur
-                #}
+                {# TON LIEN VERS LA ROUTE DÉDIÉE #}
                 <a class="dropdown-item {% if isActive %}active{% endif %}" 
                    href="{{ path('app_category_events', {'id': category.id}) }}"
                    {% if isActive %}style="background-color: {{ category.couleur }}; color: white;"{% endif %}>

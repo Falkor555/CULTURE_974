@@ -1,13 +1,45 @@
 {% extends 'base.html.twig' %}
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
 
-{% block title %}Edit Event{% endblock %}
+{% block title %}Modifier l'événement - Culture 974{% endblock %}
 
 {% block body %}
-    <h1>Edit Event</h1>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            {# Lien de retour discret #}
+            <div class="mb-4">
+                <a href="{{ path('app_event_index') }}" class="text-decoration-none text-muted">
+                    <i class="fas fa-arrow-left me-2"></i>Retour à la liste
+                </a>
+            </div>
 
-    {{ include('event/_form.html.twig', {'button_label': 'Update'}) }}
+            <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+                {# Header de la Card avec une couleur douce #}
+                <div class="card-header bg-white border-bottom p-4">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <div>
+                            <h1 class="h3 fw-bold mb-1 text-dark">Modifier l'événement</h1>
+                            <p class="text-muted mb-0 small">Mettez à jour les informations de votre sortie culturelle</p>
+                        </div>
+                        <div class="icon-shape bg-primary-light text-volcan-soft rounded-circle p-3">
+                            <i class="fas fa-edit fa-lg"></i>
+                        </div>
+                    </div>
+                </div>
 
-    <a href="{{ path('app_event_index') }}">Retour a la liste</a>
+                <div class="card-body p-4 p-md-5">
+                    {# Inclusion du formulaire avec le style personnalisé #}
+                    {{ include('event/_form.html.twig', {'button_label': 'Enregistrer les modifications'}) }}
+                </div>
 
-    {{ include('event/_delete_form.html.twig') }}
+                {# Footer de la Card pour les actions sensibles #}
+                <div class="card-footer bg-light border-top-0 p-4 d-flex justify-content-between align-items-center">
+                    <span class="small text-muted italic">Attention : la suppression est définitive.</span>
+                    {{ include('event/_delete_form.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

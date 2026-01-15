@@ -85,6 +85,12 @@ class Inscription
         return $this;
     }
 
+    public function __construct()
+    {
+        // Définit la date et l'heure actuelles au moment de la création de l'objet
+        $this->createdAt = new \DateTimeImmutable();
+    }
+
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;

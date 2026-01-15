@@ -98,24 +98,24 @@ symfony server:start
 
 ## Mises à jour récentes
 
-### Version 1.3.0 (Janvier 2026)
-- ✨ Ajout du dashboard administrateur avec statistiques par événement
-- 🐛 Correction : classement des événements par ordre chronologique
-- 🐛 Correction : création d'événements uniquement sur heures 00 et 30
-- 🐛 Correction : validation du nombre de places minimum à 1
-- 🎨 Amélioration des formulaires de création et modification
-- 🔧 Ajout du menu déroulant pour les catégories
+### Update 3
+- Ajout du dashboard administrateur avec statistiques par événement
+- Correction : classement des événements par ordre chronologique
+- Correction : création d'événements uniquement sur heures 00 et 30
+- Correction : validation du nombre de places minimum à 1
+- Amélioration des formulaires de création et modification
+- Ajout du menu déroulant pour les catégories
 
-### Version 1.2.0 (Janvier 2026)
-- 🔐 Implémentation du système d'authentification admin
-- 👤 Gestion des utilisateurs et des rôles
-- 🔒 Sécurisation des routes administratives
-- 📊 Système de permissions par utilisateur
+### Update 2
+- Implémentation du système d'authentification admin
+- Gestion des utilisateurs et des rôles
+- Sécurisation des routes administratives
+- Système de permissions par utilisateur
 
-### Version 1.1.0 (Janvier 2026)
-- 📝 Gestion complète des catégories (CRUD)
-- 📋 Système d'inscriptions aux événements
-- 🎨 Amélioration de l'interface utilisateur
+### Update 1
+- Gestion complète des catégories (CRUD)
+- Système d'inscriptions aux événements
+- Amélioration de l'interface utilisateur
 
 ## Contributeurs
 
